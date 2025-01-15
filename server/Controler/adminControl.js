@@ -43,9 +43,10 @@ if (check) {
 }
 const hachPassword=await bcrypt.hash(password,15)
  const newAdmin=await Admin.create({name:name,email:email,password:hachPassword})
- return resp.status(201).send("registred suceessfully")
+ return resp.status(201).send( newAdmin)
     }
-    catch{(error)=>{throw error}}
+    catch{(error)=>{console.log("error",error);
+    }}
 
 },
 login: async (req, res) => {
@@ -66,7 +67,8 @@ login: async (req, res) => {
       const token = jwt.sign({ id: admin.id }, "1234", { expiresIn: "24h" });
       return res.status(201).send({ message: "Login success", admin, token });
     } catch (error) {
-      throw error;
+      console.log(error);
+       
     }
   },
   currentAdmin: async (req,res) => {

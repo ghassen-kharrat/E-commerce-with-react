@@ -1,13 +1,12 @@
-const {Products,Categories} =require("../models/index");
+const {Admin,Products,Categories} =require("../models/index");
 
 
 module.exports={
 getAll:async(req,resp)=>{
 try {
-    const fetch=await Products.findAll({ include: Categories })
+    const fetch=await Products.findAll({ include:[ {model:Categories,attributes:["name"]}, {model:Admin,attributes:["name"] }] })
     resp.status(200).send(fetch)
-} catch (error) { throw error;
-}
+} catch (error) { console.log(error)}
 
 },
 Add:async(req,resp)=>{
@@ -15,7 +14,7 @@ Add:async(req,resp)=>{
     try {
         const created=await Products.create({name,imageUrl,price,quantity,options,AdminId,CategoryId})
         resp.status(201).send("created")
-    } catch (error) { throw error}
+    } catch (error) { console.log(error)}
     
     },
  Delete:async(req,resp)=>{
@@ -28,7 +27,7 @@ Add:async(req,resp)=>{
             }
             const deleted= await Products.destroy({where:{id:id}})
             resp.status(201).send("deleted")
-        } catch (error) { throw error}
+        } catch (error) { console.log(error)}
         
         },
         Update:async(req,resp)=>{
@@ -41,7 +40,7 @@ Add:async(req,resp)=>{
                 }
                 const updated= await Products.update({name,imageUrl,price,quantity,options,AdminId,CategoryId},{where:{id:id}})
                 resp.status(200).send( "Update successful");
-            } catch (error) { throw error}
+            } catch (error) { console.log(error)}
             
             },
 }
