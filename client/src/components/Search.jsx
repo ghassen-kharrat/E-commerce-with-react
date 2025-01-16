@@ -1,5 +1,5 @@
 import React from 'react';
-import './Search.css'; // Import the CSS file for custom styles
+import './Search.css'; 
 
 function Search({ products, ktibaserach }) {
   const filteredProducts = products.filter((product) => {

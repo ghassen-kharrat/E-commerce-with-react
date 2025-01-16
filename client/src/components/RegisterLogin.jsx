@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { isEmail } from "validator";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
-import "./RegisterLogin.css"; // Assuming you have a CSS file for custom styles
+import "./RegisterLogin.css"; 
 
 const required = (value) => {
   if (!value) {
@@ -44,7 +44,6 @@ const RegisterLogin = ({ forgetPassword, login, register }) => {
   const [message, setMessage] = useState("");
   const [notification, setNotification] = useState("");
 
-  // Handle toggle between forms
   const toggleForm = () => {
     setIsLogin(!isLogin);
     setMessage("");
@@ -53,7 +52,6 @@ const RegisterLogin = ({ forgetPassword, login, register }) => {
     setPassword("");
   };
 
-  // Handle login
   const handleLogin = (e) => {
     e.preventDefault();
     setMessage("");
@@ -74,7 +72,6 @@ const RegisterLogin = ({ forgetPassword, login, register }) => {
       });
   };
 
-  // Handle registration
   const handleRegister = (e) => {
     e.preventDefault();
     setMessage("");

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './AddProduct.css'; // Assuming you have a CSS file for custom styles
+import './AddProduct.css'; 
 
 function AddProduct({ data, handelAddProduct, idToken }) {
   const [newProduct, setNewProduct] = useState({

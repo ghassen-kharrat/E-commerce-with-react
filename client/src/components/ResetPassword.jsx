@@ -30,7 +30,7 @@ const ResetPassword = ({ ResettPassword }) => {
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get("token");
 
-  // Handle reset password
+
   const handleResetPassword = (e) => {
     e.preventDefault();
     setMessage("");

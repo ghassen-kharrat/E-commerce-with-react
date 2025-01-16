@@ -15,7 +15,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
 console.log("currentProd",currentProd);
 
-  // Helper Functions
+
   const fetchData = () => {
     axios
       .get("http://localhost:3000/api/prod/getall")
@@ -123,7 +123,7 @@ console.log("currentProd",currentProd);
   return (
     <Router>
       <div>
-        {isAuthenticated() && <Navbar setSearchTerm={setSearchTerm} logout={logout} />}
+        {isAuthenticated() && <Navbar data= {data} setSearchTerm={setSearchTerm} logout={logout} />}
         <Routes>
          
           <Route
