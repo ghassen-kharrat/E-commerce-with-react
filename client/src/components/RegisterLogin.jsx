@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { isEmail } from "validator";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
+import "./RegisterLogin.css"; // Assuming you have a CSS file for custom styles
 
-// Validation helpers
 const required = (value) => {
   if (!value) {
     return <div className="invalid-feedback d-block">This field is required!</div>;
@@ -36,12 +36,13 @@ const vpassword = (value) => {
   }
 };
 
-const RegisterLogin = ({ login, register }) => {
-  const [isLogin, setIsLogin] = useState(true); // Toggle between login and register
+const RegisterLogin = ({ forgetPassword, login, register }) => {
+  const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [notification, setNotification] = useState("");
 
   // Handle toggle between forms
   const toggleForm = () => {
@@ -56,16 +57,21 @@ const RegisterLogin = ({ login, register }) => {
   const handleLogin = (e) => {
     e.preventDefault();
     setMessage("");
-   
 
     if (!username || !password) {
       setMessage("All fields are required!");
-     
       return;
     }
 
-    login({ email: username, password });
-    
+    login({ email: username, password })
+      .then(() => {
+        setNotification("Logged in successfully!");
+        setTimeout(() => setNotification(""), 3000);
+      })
+      .catch((error) => {
+        const resMessage = (error?.response?.data?.message) || error.toString();
+        setMessage(resMessage);
+      });
   };
 
   // Handle registration
@@ -90,30 +96,29 @@ const RegisterLogin = ({ login, register }) => {
     register({ name: username, email, password })
       .then((response) => {
         setMessage(response.data.message || "Registered successfully!");
+        setNotification("Registered successfully!");
+        setTimeout(() => setNotification(""), 3000);
       })
       .catch((error) => {
-        const resMessage =
-          ( error?.response?.data?.message) 
-          error.toString();
-
+        const resMessage = (error?.response?.data?.message) || error.toString();
         setMessage(resMessage);
       });
   };
 
   return (
-    <div className="col-md-12">
-      <div className="card card-container">
+    <div className="container">
+      {notification && <div className="notification">{notification}</div>}
+      <div className="card card-container shadow-sm p-4">
         <img
-          src="https://tse4.mm.bing.net/th?id=OIP.Jp0PRn1PrNrWR8mI0pgDMQHaHy&pid=Api&P=0&h=180"
+          src="https://tse2.mm.bing.net/th?id=OIP.Zvs5IHgOO5kip7A32UwZJgHaHa&pid=Api&P=0&h=180"
           alt="profile-img"
-          className="profile-img-card"
-          style={{width:"170px"}}
+          className="profile-img-card mb-3"
         />
 
         {isLogin ? (
           <Form onSubmit={handleLogin}>
-            <h3>Sign In</h3>
-            <div className="form-group">
+            <h3 className="text-center mb-4">Sign In</h3>
+            <div className="form-group mb-3">
               <label htmlFor="username">Email</label>
               <Input
                 type="text"
@@ -125,7 +130,7 @@ const RegisterLogin = ({ login, register }) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group mb-3">
               <label htmlFor="password">Password</label>
               <Input
                 type="password"
@@ -137,32 +142,40 @@ const RegisterLogin = ({ login, register }) => {
               />
             </div>
 
-            <div className="form-group">
-              <button className="btn btn-primary btn-block" >
-                {  <span className="spinner-border spinner-border-sm"></span>}
-                <span>Login</span>
+            <div className="form-group d-grid gap-2">
+              <button className="btn btn-primary btn-block">
+                Login
               </button>
             </div>
 
             {message && (
-              <div className="form-group">
+              <div className="form-group mt-3">
                 <div className="alert alert-danger" role="alert">
                   {message}
                 </div>
               </div>
             )}
 
-            <p>
-              Don't have an account?{" "}
-              <a href="#!" onClick={toggleForm}>
-                Sign Up
-              </a>
-            </p>
+            <div className="text-center mt-3">
+              <p>
+                Don't have an account?{" "}
+                <a href="#!" onClick={toggleForm}>
+                  Sign Up
+                </a>
+              </p>
+
+              <p>
+                Forget Password?{" "}
+                <a href="#!" onClick={() => forgetPassword({ email: username })}>
+                  Reset Password
+                </a>
+              </p>
+            </div>
           </Form>
         ) : (
           <Form onSubmit={handleRegister}>
-            <h3>Sign Up</h3>
-            <div className="form-group">
+            <h3 className="text-center mb-4">Sign Up</h3>
+            <div className="form-group mb-3">
               <label htmlFor="username">Username</label>
               <Input
                 type="text"
@@ -174,7 +187,7 @@ const RegisterLogin = ({ login, register }) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group mb-3">
               <label htmlFor="email">Email</label>
               <Input
                 type="text"
@@ -186,7 +199,7 @@ const RegisterLogin = ({ login, register }) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group mb-3">
               <label htmlFor="password">Password</label>
               <Input
                 type="password"
@@ -198,24 +211,26 @@ const RegisterLogin = ({ login, register }) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group d-grid gap-2">
               <button className="btn btn-primary btn-block">Sign Up</button>
             </div>
 
             {message && (
-              <div className="form-group">
+              <div className="form-group mt-3">
                 <div className="alert alert-danger" role="alert">
                   {message}
                 </div>
               </div>
             )}
 
-            <p>
-              Already have an account?{" "}
-              <a href="#!" onClick={toggleForm}>
-                Sign In
-              </a>
-            </p>
+            <div className="text-center mt-3">
+              <p>
+                Already have an account?{" "}
+                <a href="#!" onClick={toggleForm}>
+                  Sign In
+                </a>
+              </p>
+            </div>
           </Form>
         )}
       </div>

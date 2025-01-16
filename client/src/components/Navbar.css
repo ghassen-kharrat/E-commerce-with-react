@@ -1,0 +1,128 @@
+/* Navbar container styles */
+.navbar {
+    background-color: #333;
+    padding: 0.5rem 1rem;
+    color: white;
+    box-sizing: border-box;
+    width: 100%;
+    position: fixed; /* Make the navbar always shown at the top */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure the navbar is above other content */
+  }
+  
+  /* Inner container to center content */
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  /* Logo styles */
+  .navbar-logo {
+    font-size: 1.5rem;
+    color: white;
+    text-decoration: none;
+  }
+  
+  /* Navbar menu styles */
+  .navbar-menu {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+  }
+  
+  /* Navbar item styles */
+  .navbar-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Navbar link styles */
+  .navbar-link {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  /* Navbar link hover effect */
+  .navbar-link:hover {
+    color: #ddd;
+  }
+  
+  /* Navbar button styles */
+  .navbar-button {
+    border: none;
+    background: none;
+    color: blue;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Navbar button hover effect */
+  .navbar-button:hover {
+    color: #ddd;
+  }
+  
+  /* Navbar search input styles */
+  .navbar-search {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    margin: 0 auto; /* Center the search bar */
+    flex-grow: 1; /* Allow the search bar to grow */
+    max-width: 400px; /* Limit the max width of the search bar */
+  }
+  
+  /* Responsive styles for smaller screens */
+  @media (max-width: 768px) {
+    .navbar-container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .navbar-menu {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      width: 100%;
+    }
+  
+    .navbar-item {
+      width: 100%;
+    }
+  
+    .navbar-link, .navbar-button, .navbar-search {
+      width: 100%;
+      text-align: left;
+    }
+  
+    .navbar-search {
+      margin-top: 0.5rem;
+    }
+  }
+  
+  /* Additional responsiveness for very small screens */
+  @media (max-width: 480px) {
+    .navbar-logo {
+      font-size: 1.2rem;
+    }
+  
+    .navbar-link, .navbar-button {
+      font-size: 0.9rem;
+    }
+  
+    .navbar-search {
+      font-size: 0.9rem;
+    }
+  }

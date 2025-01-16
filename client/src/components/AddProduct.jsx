@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './AddProduct.css'; // Assuming you have a CSS file for custom styles
 
-function AddProduct({ handelAddProduct, idToken }) {
-  console.log("rrrrrr", idToken);
-  console.log("add fn", handelAddProduct);
-
+function AddProduct({ data, handelAddProduct, idToken }) {
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: '',
@@ -14,6 +12,8 @@ function AddProduct({ handelAddProduct, idToken }) {
     AdminId: idToken,
   });
   const [image, setImage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -21,7 +21,7 @@ function AddProduct({ handelAddProduct, idToken }) {
   };
 
   const setImageFile = async (file) => {
-    console.log(file);
+    setLoading(true);
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', 'Ghassen123');
@@ -31,24 +31,25 @@ function AddProduct({ handelAddProduct, idToken }) {
         'https://api.cloudinary.com/v1_1/dqh6arave/image/upload',
         formData
       );
-      console.log(res);
       const imageUrl = res.data.secure_url;
-
-      // Update both the image state and the newProduct's imageUrl
       setImage(imageUrl);
       setNewProduct((prevProduct) => ({
         ...prevProduct,
-        imageUrl: imageUrl, // Automatically save the URL
+        imageUrl: imageUrl, 
       }));
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setMessage('Failed to upload image.');
+      setLoading(false);
     }
   };
 
-  console.log("image", image);
-  console.log("newProduct", newProduct);
-
   const handleAddProduct = () => {
+    if (!newProduct.name || !newProduct.price || !newProduct.quantity || !newProduct.CategoryId || !newProduct.imageUrl) {
+      setMessage('Please fill out all fields.');
+      return;
+    }
     handelAddProduct(newProduct);
     setNewProduct({
       name: '',
@@ -58,53 +59,96 @@ function AddProduct({ handelAddProduct, idToken }) {
       CategoryId: '',
       AdminId: idToken,
     });
+    setMessage('Product added successfully!');
+    setTimeout(() => {
+      window.location.href = '/home';
+    }, 2000);
   };
 
   return (
-    <div>
-      <h2>Add New Product</h2>
-      <input
-        type="text"
-        name="name"
-        placeholder="Product Name"
-        value={newProduct.name}
-        onChange={handleInputChange}
-      />
-      <input
-        type="number"
-        name="price"
-        placeholder="Product Price"
-        value={parseInt(newProduct.price)}
-        onChange={handleInputChange}
-      />
-      <input
-        type="number"
-        name="quantity"
-        placeholder="Product Quantity"
-        value={parseInt(newProduct.quantity)}
-        onChange={handleInputChange}
-      />
-
-      <input
-        type="number"
-        name="CategoryId"
-        placeholder="Category ID (<= 2)"
-        value={parseInt(newProduct.CategoryId)}
-        onChange={handleInputChange}
-      />
-
-      <input
-        type="file"
-        onChange={(e) => setImageFile(e.target.files[0])}
-      />
-      <input
-        type="text"
-        name="imageUrl"
-        placeholder="Image URL"
-        value={newProduct.imageUrl}
-        readOnly
-      />
-      <button onClick={handleAddProduct}>Add Product</button>
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">Add New Product</h2>
+      <div className="card card-container shadow-sm p-4">
+        {message && (
+          <div className="alert alert-info" role="alert">
+            {message}
+          </div>
+        )}
+        <div className="form-group mb-3">
+          <label htmlFor="name">Product Name</label>
+          <input
+            type="text"
+            className="form-control"
+            name="name"
+            placeholder="Product Name"
+            value={newProduct.name}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="form-group mb-3">
+          <label htmlFor="price">Product Price</label>
+          <input
+            type="number"
+            className="form-control"
+            name="price"
+            placeholder="Product Price"
+            value={newProduct.price}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="form-group mb-3">
+          <label htmlFor="quantity">Product Quantity</label>
+          <input
+            type="number"
+            className="form-control"
+            name="quantity"
+            placeholder="Product Quantity"
+            value={newProduct.quantity}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="form-group mb-3">
+          <label htmlFor="CategoryId">Category</label>
+          <select
+            className="form-control"
+            name="CategoryId"
+            value={newProduct.CategoryId}
+            onChange={handleInputChange}
+          >
+            <option value="">Select Category</option>
+            {data.map((el) => (
+              <option key={el.id} value={el.CategoryId}>
+                {el.Category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group mb-3">
+          <label htmlFor="image">Product Image</label>
+          <input
+            type="file"
+            className="form-control"
+            onChange={(e) => setImageFile(e.target.files[0])}
+          />
+          {loading && <div className="spinner-border text-primary mt-2" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>}
+        </div>
+        <div className="form-group mb-3">
+          <label htmlFor="imageUrl">Image URL</label>
+          <input
+            type="text"
+            className="form-control"
+            name="imageUrl"
+            placeholder="Image URL"
+            value={newProduct.imageUrl}
+            readOnly
+          />
+        </div>
+        <button onClick={handleAddProduct} className="btn btn-primary btn-block">
+          Add Product
+        </button>
+      </div>
     </div>
   );
 }
